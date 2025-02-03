@@ -1,13 +1,8 @@
 import { test, expect } from '@playwright/test';
+import tags from '../test-data/tags.json'
 
 test.beforeEach(async ({page}) => {
   await page.route('https://conduit-api.bondaracademy.com/api/tags', async route => {
-    const tags = {
-      "tags":[
-        "automation",
-        "playwright"
-      ]
-    }
     await route.fulfill({
       body: JSON.stringify(tags)
     })
