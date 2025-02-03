@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({page}) => {
-  await page.route('https://conduit-api.bondaracademy.com', async route => {
+  await page.route('https://conduit-api.bondaracademy.com/api/tags', async route => {
     const tags = {
       "tags":[
         "automation",
