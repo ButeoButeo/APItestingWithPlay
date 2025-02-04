@@ -37,7 +37,16 @@ test('delete article', async({page, request})=>{
     }
   })
   const responseBody = await response.json()
-  console.log(responseBody)
+  const accessToken = responseBody.user.token
+
+  await request.post('https://conduit-api.bondaracademy.com/api/articles/', {
+    data:{
+      "article":{"title":"dsfsd","description":"sdf","body":"sdfs","tagList":[]}
+    },
+    headers: {
+      Authorization: `Token ${accessToken}` 
+    }
+  })
 })
 
 
