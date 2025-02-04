@@ -8,8 +8,15 @@ test.beforeEach(async ({page}) => {
       body: JSON.stringify(tags)
     })
   })
+
+  await page.route('*/**/api/articels*', async route => {
+    const resonse = await route.fetch()
+    })
+  
   await page.goto('https://conduit.bondaracademy.com');
 })
+
+
 
 test('has title', async ({ page }) => {
   // Expect a title "to contain" a substring.
