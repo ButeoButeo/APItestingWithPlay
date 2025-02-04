@@ -61,4 +61,18 @@ test('delete article', async({page, request})=>{
   await expect(page.locator('app-article-list h1').first()).not.toContainText('New article test')
 })
 
+test('create article', async({page})=>{
+  await page.getByText('New Article').click()
+  await page.getByRole('textbox', {name: 'Article Title'}).fill('Playwright is awesome')
+  await page.getByRole('textbox', {name: "What's this article about"}).fill('About the Playwright')
+  await page.getByRole('textbox', {name: 'Write your article (in markdown)'}).fill('We like to use playwright for automation')
+  await page.getByRole('button', {name: 'Publish Article'}).click()
+
+  await expect(page.locator('.article-page h1')).toContainText('Playwright is awesome')
+  await page.getByText('Home').click()
+  await page.getByText('Global Feed').click()
+
+  await expect(page.locator('app-article-list h1').first()).toContainText('Playwright is awesome')
+})
+
 
