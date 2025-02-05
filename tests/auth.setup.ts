@@ -25,7 +25,10 @@ const authFile = '.auth/user.json'
         }
       })
       const responseBody = await response.json()
-      const acessToken = responseBody.user.token
-      user.origins[0].localStorage[0].value=acessToken
+      const accessToken = responseBody.user.token
+
+      user.origins[0].localStorage[0].value=accessToken
       fs.writeFileSync(authFile,JSON.stringify(user))
+
+      process.env['ACCESS_TOKEN'] = accessToken
     })
