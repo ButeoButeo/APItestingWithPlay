@@ -44,7 +44,7 @@ test('delete article', async({page, request})=>{
   await page.getByText('New article test').first().click({force: true})
   await page.getByRole('button', {name:"Delete Article"}).first().click({force: true})
   await page.getByText('Global Feed').click({force: true})
-
+  await page.waitForLoadState('networkidle')
   await expect(page.locator('app-article-list h1').first()).not.toContainText('New article test')
 })
 
