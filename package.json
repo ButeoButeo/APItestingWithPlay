@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "ng": "ng",
+    "start": "ng server",
+    "test": "npx playwright test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@angular/cli": "^19.1.6",
     "@playwright/test": "^1.50.1",
     "@types/node": "^22.13.0"
   }

@@ -8,8 +8,7 @@ test.beforeEach(async ({page}) => {
       body: JSON.stringify(tags)
     })
   })
-  await page.goto('https://conduit.bondaracademy.com');
-
+  await page.goto('/');
 })
 
 test('has title', async ({ page }) => {
@@ -31,23 +30,6 @@ test('has title', async ({ page }) => {
 });
 })
 
-test('delete article', async({page, request})=>{
-
-  const articleResponse = await request.post('https://conduit-api.bondaracademy.com/api/articles/', {
-    data:{
-      "article":{"title":"New article test","description":"New article test","body":"New article test","tagList":[]}
-    },
-  })
-  expect(articleResponse.status()).toEqual(201)
-
-  await page.getByText('Global Feed').click({force: true})
-  await page.getByText('New article test').first().click({force: true})
-  await page.getByRole('button', {name:"Delete Article"}).first().click({force: true})
-  await page.getByText('Global Feed').click({force: true})
-  await page.waitForLoadState('networkidle')
-  await expect(page.locator('app-article-list h1').first()).not.toContainText('New article test')
-})
-
 test('create article', async({page, request})=>{
   await page.getByText('New Article').click()
   await page.getByRole('textbox', {name: 'Article Title'}).fill('Playwright is awesome')
@@ -56,7 +38,7 @@ test('create article', async({page, request})=>{
   await page.getByRole('button', {name: 'Publish Article'}).click({force: true})
   const articleResponse = await page.waitForResponse('https://conduit-api.bondaracademy.com/api/articles/')
   const articleResponseBody = await articleResponse.json()
-  const slugId = articleResponseBody.article.slug
+  const slugId = await articleResponseBody.article.slug
 
   await expect(page.locator('.article-page h1')).toContainText('Playwright is awesome')
   await page.getByText('Home').click({force: true})
@@ -69,4 +51,22 @@ test('create article', async({page, request})=>{
   expect (deleteArticleResponse.status()).toEqual(204)
 })
 
+test('delete article', async({page, request})=>{
+
+  const articleResponse = await request.post('https://conduit-api.bondaracademy.com/api/articles/', {
+    data:{
+      "article":{"title":"New article test","description":"New article test","body":"New article test","tagList":[]}
+    },
+  })
+  
+  expect(articleResponse.status()).toEqual(201)
+  await page.waitForLoadState('domcontentloaded')
+
+  await page.getByText('Global Feed').click({force: true})
+  await page.getByText('New article test').first().click({force: true})
+  await page.getByRole('button', {name:"Delete Article"}).first().click({force: true})
+  await page.getByText('Global Feed').click({force: true})
+  await page.waitForLoadState('domcontentloaded')
+  await expect(page.locator('app-article-list h1').first()).not.toContainText('New article test')
+})
 
